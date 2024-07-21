@@ -4,6 +4,9 @@ import { Appbar, Menu, Avatar } from 'react-native-paper';
 import { useAuth } from '@/context/authContext';
 import { FontAwesome } from 'react-native-vector-icons';
 
+import { Colors } from '@/constants/Colors';
+
+
 const ChatListHeader = () => {
   const { user } = useAuth();
   const [menuVisible, setMenuVisible] = useState(false);
@@ -29,7 +32,7 @@ const ChatListHeader = () => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#6200ee',
+    backgroundColor: Colors.light.backgroundHeader,
     justifyContent: 'space-between',
   },
   title: {

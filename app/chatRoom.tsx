@@ -1,14 +1,15 @@
-// screens/chatRoom.js
 import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Alert, Keyboard } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { TextInput } from 'react-native-paper';
-import ChatRoomHeader from '@/components/ChatRoomHeader';
+import { TextInput, Appbar } from 'react-native-paper';
 import MessageList from '@/components/MessageList';
 import { useAuth } from '@/context/authContext';
-import { getRoomId } from '../../utils/common';
+import { getRoomId } from '../utils/common';
 import { addDoc, collection, doc, onSnapshot, orderBy, query, setDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
+
+import { Colors } from '@/constants/Colors';
+import ChatRoomHeader from '@/components/ChatRoomHeader';
 
 export default function ChatRoom() {
   const item = useLocalSearchParams();
@@ -20,7 +21,6 @@ export default function ChatRoom() {
 
   const createRoomIfNotExists = async () => {
     let roomId = getRoomId(user?.userId, item?.userId);
-    console.log('uẻ nè: ',user, '   =   ', item)
     await setDoc(doc(db, "rooms", roomId), {
       roomId,
       createdAt: Timestamp.fromDate(new Date()),
@@ -36,20 +36,20 @@ export default function ChatRoom() {
     const q = query(messagesRef, orderBy('createdAt', 'asc'));
 
     const unsub = onSnapshot(q, (snapshot) => {
-      let allMessages = snapshot.docs.map((doc) =>{
-        return doc.data()
+      let allMessages = snapshot.docs.map((doc) => {
+        return doc.data();
       });
       setMessages([...allMessages]);
     });
 
     const KeyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow', updateScrollView
-    )
-  
-    return ()=>{
+    );
+
+    return () => {
       unsub();
       KeyboardDidShowListener.remove();
-    }
+    };
   }, [item.userId]);
 
   const handleSend = async () => {
@@ -77,22 +77,21 @@ export default function ChatRoom() {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     updateScrollView();
-  }, [messages])
+  }, [messages]);
 
-  const updateScrollView = () =>{
-    setTimeout(()=>{
-      scrollViewRef?.current?.scrollToEnd({animated: true})
-    }, 100)
-  }
-
+  const updateScrollView = () => {
+    setTimeout(() => {
+      scrollViewRef?.current?.scrollToEnd({ animated: true });
+    }, 100);
+  };
 
   return (
     <View style={styles.container}>
-      <ChatRoomHeader user={item} router={router} />
+      <ChatRoomHeader router={router} user={user}></ChatRoomHeader>
       <View style={styles.messageListContainer}>
-        <MessageList scrollViewRef={scrollViewRef} messages={messages} currentUser={user}/>
+        <MessageList scrollViewRef={scrollViewRef} messages={messages} currentUser={user} />
       </View>
       <View style={styles.inputContainer}>
         <TextInput

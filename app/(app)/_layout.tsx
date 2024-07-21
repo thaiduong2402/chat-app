@@ -21,28 +21,29 @@ export default function TabLayout() {
     }}>
       <Tabs.Screen name='home'
       options={{
-        tabBarLabel:'Home',
+        tabBarLabel: () => null,
         header : ()=> <HomeHeader/>,
         tabBarIcon:({color})=><Ionicons name='home' size={24} color={color}></Ionicons>
       }}
       />
       <Tabs.Screen name='explore'
       options={{
-        tabBarLabel:'Explore',
+        tabBarLabel: () => null,
         header : ()=> <HomeHeader/>,
         tabBarIcon:({color})=><Feather name="globe" size={24} color={color} />
       }}
       />
       <Tabs.Screen name='chat'
       options={{
-        tabBarLabel:'Chat',
+        tabBarLabel: () => null,
         header : ()=> <ChatListHeader/>,
         tabBarIcon:({color})=><Entypo name="chat" size={24} color={color} />
       }}
       />
       <Tabs.Screen name='profile'
       options={{
-        tabBarLabel:'Profile',
+        headerShown: false,
+        tabBarLabel: () => null,
         tabBarIcon:({color})=><FontAwesome name="user-circle-o" size={24} color={color} />
       }}
       />

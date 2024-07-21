@@ -4,6 +4,8 @@ import { Appbar, Drawer, Avatar, Button, IconButton, DrawerSection, DrawerItem }
 import { useAuth } from '@/context/authContext';
 import { FontAwesome } from 'react-native-vector-icons';
 
+import { Colors } from '@/constants/Colors';
+
 const HomeHeader = () => {
   const { logout, user } = useAuth();
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -56,7 +58,7 @@ const HomeHeader = () => {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#6200ee', // Thay đổi màu sắc của tiêu đề nếu cần thiết
+    backgroundColor: Colors.light.backgroundHeader, // Thay đổi màu sắc của tiêu đề nếu cần thiết
     justifyContent: 'space-between',
   },
   title: {

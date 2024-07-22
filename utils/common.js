@@ -4,7 +4,7 @@ export const getRoomId = (userId1, userId2) =>{
     return roomId;
 }
 
-export function formatDate(timestamp) {
+export function formatTime(timestamp) {
     if (!timestamp || !timestamp.seconds) {
       return '';
     }

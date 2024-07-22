@@ -1,5 +1,5 @@
 import { db } from '@/firebaseConfig';
-import { formatDate, getRoomId } from '@/utils/common';
+import { formatTime, getRoomId } from '@/utils/common';
 import { collection, doc, DocumentData, onSnapshot, orderBy, query } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
@@ -29,7 +29,7 @@ const ChatItem = ({ item, openChatRoom, noBorder = false, router, currenUser }:a
 
   const renderTime = () =>{
       if(lastMessage){
-        let date = formatDate(lastMessage?.createdAt)
+        let date = formatTime(lastMessage?.createdAt)
         return date
       }
   }

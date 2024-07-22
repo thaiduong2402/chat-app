@@ -1,42 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { FlatList, Text } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useAuth } from '@/context/authContext';
+import { db } from '@/firebaseConfig';
+import { collection, getDocs } from 'firebase/firestore';
 import ProfileHeader from '../../components/ProfileHeader';
 import PostCard from '../../components/PostCard';
-
-import { useAuth } from '@/context/authContext'
-
+import AddPostButton from '@/components/AddPostButton';
 
 const ProfileScreen = () => {
-  
-  const {user} = useAuth();
-  const [users, setUsers] = useState([])
+  const { user } = useAuth();
+  const [posts, setPosts] = useState([]);
+  const [isScroll, setIsScroll] = useState(false);
+  const router = useRouter();
 
-  useEffect(()=>{
-    console.log('user: ', user);
-  },[])
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const postsCollection = collection(db, 'posts');
+        const postsSnapshot = await getDocs(postsCollection);
+        const postsList = postsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setPosts(postsList);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
 
-  const posts = [
-    {
-      id: '1',
-      title: 'My First Post',
-      content: 'This is the content of my first post. Loving this app!',
-      image: 'https://example.com/post-image-1.jpg',
-      likes: 5,
-      comments: 2,
-      shares: 3,
-    },
-    {
-      id: '2',
-      title: 'Beautiful Sunset',
-      content: 'Captured this stunning sunset at the beach yesterday.',
-      image: 'https://example.com/post-image-2.jpg',
-      likes: 10,
-      comments: 8,
-      shares: 6,
-    },
-    // Add more posts as needed
-  ];
+    fetchPosts();
+  }, []);
 
   const handleLike = (id) => {
     console.log(`Liked post ${id}`);
@@ -50,6 +44,14 @@ const ProfileScreen = () => {
     console.log(`Shared post ${id}`);
   };
 
+  const handleScroll = () => {
+    setIsScroll(true);
+  };
+
+  const handleScrollEnd = () => {
+    setIsScroll(false);
+  };
+
   const renderPost = ({ item }) => (
     <PostCard
       post={item}
@@ -60,13 +62,18 @@ const ProfileScreen = () => {
   );
 
   return (
-    <FlatList
-      data={posts}
-      renderItem={renderPost}
-      keyExtractor={(item) => item.id}
-      ListHeaderComponent={<ProfileHeader user={user} onEditProfile={() => console.log('Edit Profile Pressed')} />}
-      contentContainerStyle={styles.container}
-    />
+    <View style={{ position: 'relative' }}>
+      <AddPostButton isScroll={isScroll} router={router} />
+      <FlatList
+        data={posts}
+        renderItem={renderPost}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={<ProfileHeader user={user} onEditProfile={() => console.log('Edit Profile Pressed')} />}
+        contentContainerStyle={styles.container}
+        onScroll={handleScroll}
+        onMomentumScrollEnd={handleScrollEnd}
+      />
+    </View>
   );
 };
 

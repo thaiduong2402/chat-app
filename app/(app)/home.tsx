@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import HomeHeader from '@/components/HomeHeader'; // Đảm bảo đường dẫn đúng với cấu trúc dự án của bạn
 
 const HomeScreen = () => {
   return (

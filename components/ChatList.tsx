@@ -14,7 +14,6 @@ const router = useRouter();
   const handleOpenChatRoom = (item:any) => {
     console.log('đấ', item);
     router.push({pathname: '/chatRoom', params: { ...item }})
-    // Xử lý logic khi nhấn vào mục trò chuyện, ví dụ: điều hướng đến trang chi tiết trò chuyện
   };
 
   return (
@@ -22,7 +21,7 @@ const router = useRouter();
       <FlatList
         data={users}
         contentContainerStyle={styles.listContainer}
-        keyExtractor={(item, index) => index.toString()} // Sử dụng index làm key tạm thời, nên có một ID duy nhất cho mỗi mục trong thực tế
+        keyExtractor={(item, index) => index.toString()} 
         showsVerticalScrollIndicator={false}
         renderItem={({ item, index }) => <ChatItem 
           item={item} 
